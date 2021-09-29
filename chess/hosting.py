@@ -1,5 +1,6 @@
 # import threading
 import socket
+import json
 
 class ServerHandler:
 	def __init__(self, IP, Port):
@@ -20,18 +21,19 @@ class ServerHandler:
 		return server, c
 
 	def encode_state(self, board="", pieces="", message=""):
-		data = "\n".join([str(board), pieces, message])
-		return data
+		data = {"board": board,
+				"pieces": pieces, 
+				"message": message}
+		return json.dumps(data)
 
 	def send_state(self, data):
-		self.client.send(bytes(data.encode("utf-8")))
+		self.client.send(bytes(data, "utf-8"))
 
 	def recv_inputs(self):
-		while True:
-			data = self.client.recv(1024)
-			if not data:
-				break
+		data = self.client.recv(1024)
 		data = data.decode("utf-8")
+		if not data:
+			self.client.close()
 		return data
 
 	def close_conn(self, message):
@@ -50,21 +52,21 @@ class ClientHandler:
 		data = data.decode("utf-8")
 		if data == "ready":
 			print(f"[+] Connected With {Server}:{Port}")
+			print("Game Started")
 		return server
 
 	def encode_inputs(self, data):
-		return "\n".join([str(data[0]), str(data[1])])
+		inputs = {"piece_pos": data[0], 
+				"piece_to_go": data[1]}
+		return json.dumps(inputs)
 
 	def recv_data(self):
-		while True:
-			data = self.server.recv(1024)
-			if not data:
-				break
+		data = self.server.recv(1024)
 		data = data.decode("utf-8")
 		return data
 
 	def send_inputs(self, data):
-		self.server.send(bytes(data.encode("utf-8")))
+		self.server.send(bytes(data, "utf-8"))
 
 
 # board = [

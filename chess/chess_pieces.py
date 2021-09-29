@@ -12,13 +12,14 @@ class ChessPiece:
 	def play_move(self, position, board, pos_handler):
 		all_moves = self.valid_moves(board, pos_handler)
 		print("Possible moves was", [i[0] for i in all_moves])
-		if position in [i[0] for i in all_moves]:
-			board[self.position[0]][self.position[1]] = " "
-			board[position[0]][position[1]] = self.symbol
-			self.position = position
-			return True, board
-		else:
-			return False, board
+		for i in all_moves:
+			if position == i[0]:
+				board[self.position[0]][self.position[1]] = " "
+				board[position[0]][position[1]] = self.symbol
+				self.position = position
+				return True, board, i[1]
+		return False, board, None
+
 
 class Pawn(ChessPiece):
 	def __init__(self, position):

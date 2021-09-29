@@ -77,7 +77,7 @@ class PlayerHandler:
 			self.player2.update_piece(all_pieces)
 
 	def play_piece(self, piece, position, board, pos_handler):
-		check, n_board = piece.play_move(position, board, pos_handler)
+		check, n_board, piece = piece.play_move(position, board, pos_handler)
 		if check:
 			return True, piece, n_board
 		else:
@@ -163,10 +163,11 @@ def Initiator():
 	return [white_pieces, black_pieces, []]
 
 def PositionChecks(pos):
-	if len(pos) == 2:
-		if type(pos[0]) == int and type(pos[1]) == int:
-			if (pos[0] >= 0 and pos[0] <= 7) and (pos[1] >= 0 and pos[1] <= 7):
-				return True
+	if type(pos) == tuple:
+		if len(pos) == 2:
+			if type(pos[0]) == int and type(pos[1]) == int:
+				if (pos[0] >= 0 and pos[0] <= 7) and (pos[1] >= 0 and pos[1] <= 7):
+					return True
 	return False
 
 def clear_screen():

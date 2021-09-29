@@ -32,12 +32,14 @@ try:
 			if piece == False or piece.team != player_handler.current.team:
 				print("Piece Position is Incorrect")
 			else:
-				check, piece, n_board = player_handler.play_piece(piece, piece_to_go, board, pos_handler)
+				# print(piece.position)
+				check, c_piece, n_board = player_handler.play_piece(piece, piece_to_go, board, pos_handler)
 				if check:
+					# print(player_handler.current.pieces[player_handler.current.pieces.index(piece)].position)
 					board = n_board
-					if piece != " ":
-						pieces[2].append(piece)
-						player_handler.remove_piece(piece)
+					if c_piece != " ":
+						pieces[2].append(c_piece)
+						player_handler.remove_piece(c_piece)
 					pos_handler = PositionHandler(player_handler.player1.pieces + player_handler.player2.pieces)
 					end, lose_player = player_handler.game_end()
 					checkmate = player_handler.checkmate(board, pos_handler)
