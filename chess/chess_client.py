@@ -1,6 +1,6 @@
 import socket
 from hosting import ClientHandler
-from game_data import DisplayBoard
+from game_data import DisplayBoard, clear_screen
 import json
 
 try:
@@ -25,11 +25,18 @@ try:
 				try:
 					data = json.loads(data)
 					if data["board"] == "":
-						print(data["message"])
+						try:
+							clear_screen()
+							DisplayBoard(board)
+							print(data["message"])
+						except ReferenceError:
+							print("hi")
+							pass
 					else:
 						board = data["board"]
 						pieces = data["pieces"]
 						# print(board)
+						clear_screen()
 						DisplayBoard(board)
 						print(pieces)
 				except json.decoder.JSONDecodeError:
